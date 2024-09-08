@@ -1,0 +1,49 @@
+user:
+  sender:
+    bank_type:
+      bank_account_no:
+        status:
+          active:
+            account_no: "1111111111"
+            type: bankAccount
+          inactive:
+            account_no: "2222222222"
+            type: bankAccount
+          block:
+            account_no: "3333333333"
+            type: bankAccount
+  receiver:
+    bank_type:
+      bank_account_no:
+        status:
+          active:
+            account_no: "4444444444"
+            type: bankAccount
+          inactive:
+            account_no: "5555555555"
+            type: bankAccount
+          block:
+            account_no: "6666666666"
+            type: bankAccount
+      promptPay_mobile:
+        status:
+          active:
+            account_no: "0844444444"
+            type: promptPay
+          inactive:
+            account_no: "0855555555"
+            type: promptPay
+          block:
+            account_no: "0866666666"
+            type: promptPay
+      promptPay_national_id:
+        status:
+          active:
+            account_no: "1399900080764"
+            type: promptPay
+          inactive:
+            account_no: "1399900080765"
+            type: promptPay
+          block:
+            account_no: "1399900080766"
+            type: promptPay

@@ -1,0 +1,7 @@
+{
+  "amount": 0.01,
+  "sendingAccount": "<sendingAccount>",
+  "receivingAccount": "<receivingAccount>",
+  "typeReceivingAccount": "<typeReceivingAccount>",
+  "receivingBankCode": "<receivingBankCode>"
+}

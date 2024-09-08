@@ -1,0 +1,38 @@
+#expected response code
+response:
+  success:
+    code: 200
+    msg: SUCCESS
+  bad_request:
+    code: 400
+    msg: BAD_REQUEST
+  invalid_data:
+    code: 200
+    msg: INVALID_DATA
+  timeout:
+    code: 500
+    msg: TIMEOUT
+  internal_error:
+    code: 500
+    msg: INTERNAL_ERROR
+  invalid_bank_account:
+    code: 500
+    msg: INVALID_BANK_ACCOUNT
+  transfer_unsuccessful_with_legal:
+    code: 500
+    msg: TRANSFER_UNSUCCESSFUL_WITH_LEGAL
+  invalid_promptpay_id:
+    code: 200
+    msg: INVALID_PROMPTPAY_ID
+  insufficient_fund:
+    code: 500
+    msg: INSUFFICIENT_FUND
+  transaction_limit_daily:
+    code: 500
+    msg: TRANSACTION_LIMIT_DAILY
+  transaction_limit:
+    code: 500
+    msg: TRANSACTION_LIMIT
+  service_closed:
+    code: 500
+    msg: SERVICE_CLOSED
