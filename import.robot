@@ -5,6 +5,7 @@ Library    Collections
 Library    JSONLibrary
 Library    json
 Library    RequestsLibrary
+Library    DatabaseLibrary
 
 Variables    Config/Config.yaml
 Variables    Resources/TestData/User_Bank_Account.yaml

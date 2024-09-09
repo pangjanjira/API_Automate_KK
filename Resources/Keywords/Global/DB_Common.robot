@@ -17,7 +17,6 @@ Insert Transaction For Prepare Precondition Test Data
     [Arguments]    ${sending_account}    ${receiving_account}    ${amount_boundary_1}    ${amount_boundary_2}
 
     DB Connect To Database Transfer
-    #insert 18 record = 18 ล้าน
     FOR    ${id}    IN RANGE    1   19
         ${current_time}    Get DateTime
         ${transfer_ref_id}    Generate random string    6     0123456789
