@@ -8,6 +8,15 @@ ${receivingBankCode}=   KK
 ${increase_amount}=    1000000.00
 ${no_increase_amount}=    0.00
 
+${SENDER_BANK_ACCOUNT_NO_ACTIVE}=    ${user.sender.bank_type.bank_account_no.status.active.account_no}
+${SENDER_BANK_ACCOUNT_NO_INACTIVE}=    ${user.sender.bank_type.bank_account_no.status.inactive.account_no}
+
+${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}=    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}
+${RECEIVER_PROMPYPAY_MOBILE_INACTIVE}=    ${user.receiver.bank_type.promptPay_mobile.status.inactive.account_no}
+
+${RECEIVER_PROMPYPAY_MOBILE_ACTIVE_TYPE}=    ${user.receiver.bank_type.promptPay_mobile.status.active.type}
+${RECEIVER_PROMPYPAY_MOBILE_INACTIVE_TYPE}=    ${user.receiver.bank_type.promptPay_mobile.status.inactive.type}
+
 *** Test Cases ***
 API_TC_0632 Verify transfer money from customer’s saving account to another bank account with PromptPay mobile using the check API when transfer amount < 20 million per day and transaction time out < 30 second and transfer amount < 0.01 and make a transaction before 01:00 AM
     [Documentation]    Prepare Transaction amount per day = 19,999,998.00
@@ -18,16 +27,16 @@ API_TC_0632 Verify transfer money from customer’s saving account to another ba
     ${amount_boundary_2}    Set Variable    999998.00
     ${transfer_amount}    Set Variable    0.009
 
-    Insert Transaction For Prepare Precondition Test Data    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}    ${amount_boundary_1}    ${amount_boundary_2}
+    Insert Transaction For Prepare Precondition Test Data    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}    ${amount_boundary_1}    ${amount_boundary_2}
     ${response_status}    ${response_code}    ${response_message}
-    ...    Transfer Money To Another Bank Account For Failed Case    ${transfer_amount}    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}
-    ...    ${user.receiver.bank_type.promptPay_mobile.status.active.type}    ${receivingBankCode}
+    ...    Transfer Money To Another Bank Account For Failed Case    ${transfer_amount}    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}
+    ...    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE_TYPE}    ${receivingBankCode}
 
-    Verify Response Message With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response.insufficient_fund.msg}
-    Verify Transfer Amount With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${transfer_amount}
-    Verify Sender Account With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${user.sender.bank_type.bank_account_no.status.active.account_no}
-    Verify Receiver Account With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}
-    Verify Response Message By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_receivingAccountNo}    ${response_message}
+    Verify Response Message With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response.insufficient_fund.msg}
+    Verify Transfer Amount With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${transfer_amount}
+    Verify Sender Account With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}
+    Verify Receiver Account With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}
+    Verify Response Message By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_receivingAccountNo}    ${response_message}
     Verify Response Message With API    ${response_message}    ${response.insufficient_fund.msg}
     Verify Response Code With API    ${response_code}    ${response.insufficient_fund.code}
 
@@ -40,16 +49,16 @@ API_TC_0648 Verify transfer money from customer’s saving account to another ba
     ${amount_boundary_2}    Set Variable    999999.991
     ${transfer_amount}    Set Variable    0.009
 
-    Insert Transaction For Prepare Precondition Test Data    ${user.sender.bank_type.bank_account_no.status.inactive.account_no}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}    ${amount_boundary_1}    ${amount_boundary_2}
+    Insert Transaction For Prepare Precondition Test Data    ${SENDER_BANK_ACCOUNT_NO_INACTIVE}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}    ${amount_boundary_1}    ${amount_boundary_2}
     ${response_status}    ${response_code}    ${response_message}
-    ...    Transfer Money To Another Bank Account For Failed Case    ${transfer_amount}    ${user.sender.bank_type.bank_account_no.status.inactive.account_no}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}
-    ...    ${user.receiver.bank_type.promptPay_mobile.status.active.type}    ${receivingBankCode}
+    ...    Transfer Money To Another Bank Account For Failed Case    ${transfer_amount}    ${SENDER_BANK_ACCOUNT_NO_INACTIVE}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}
+    ...    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE_TYPE}    ${receivingBankCode}
 
-    Verify Response Message With Database    ${user.sender.bank_type.bank_account_no.status.inactive.account_no}    ${response_transferReferenceID}    ${response.invalid_bank_account.msg}
-    Verify Transfer Amount With Database    ${user.sender.bank_type.bank_account_no.status.inactive.account_no}    ${response_transferReferenceID}    ${transfer_amount}
-    Verify Sender Account With Database    ${user.sender.bank_type.bank_account_no.status.inactive.account_no}    ${response_transferReferenceID}    ${user.sender.bank_type.bank_account_no.status.inactive.account_no}
-    Verify Receiver Account With Database    ${user.sender.bank_type.bank_account_no.status.inactive.account_no}    ${response_transferReferenceID}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}
-    Verify Response Message By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.inactive.account_no}    ${response_receivingAccountNo}    ${response_message}
+    Verify Response Message With Database    ${SENDER_BANK_ACCOUNT_NO_INACTIVE}    ${response_transferReferenceID}    ${response.invalid_bank_account.msg}
+    Verify Transfer Amount With Database    ${SENDER_BANK_ACCOUNT_NO_INACTIVE}    ${response_transferReferenceID}    ${transfer_amount}
+    Verify Sender Account With Database    ${SENDER_BANK_ACCOUNT_NO_INACTIVE}    ${response_transferReferenceID}    ${SENDER_BANK_ACCOUNT_NO_INACTIVE}
+    Verify Receiver Account With Database    ${SENDER_BANK_ACCOUNT_NO_INACTIVE}    ${response_transferReferenceID}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}
+    Verify Response Message By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_INACTIVE}    ${response_receivingAccountNo}    ${response_message}
     Verify Response Message With API    ${response_message}    ${response.invalid_bank_account.msg}
     Verify Response Code With API    ${response_code}    ${response.invalid_bank_account.code}
 
@@ -62,16 +71,16 @@ API_TC_0656 Verify transfer money from customer’s saving account to another ba
     ${amount_boundary_2}    Set Variable    1000000.00
     ${transfer_amount}    Set Variable    0.009
 
-    Insert Transaction For Prepare Precondition Test Data    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}    ${amount_boundary_1}    ${amount_boundary_2}
+    Insert Transaction For Prepare Precondition Test Data    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}    ${amount_boundary_1}    ${amount_boundary_2}
     ${response_status}    ${response_code}    ${response_message}
-    ...    Transfer Money To Another Bank Account For Failed Case    ${transfer_amount}    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}
-    ...    ${user.receiver.bank_type.promptPay_mobile.status.active.type}    ${receivingBankCode}
+    ...    Transfer Money To Another Bank Account For Failed Case    ${transfer_amount}    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}
+    ...    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE_TYPE}    ${receivingBankCode}
 
-    Verify Response Message With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response.transaction_limit_daily.msg}
-    Verify Transfer Amount With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${transfer_amount}
-    Verify Sender Account With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${user.sender.bank_type.bank_account_no.status.active.account_no}
-    Verify Receiver Account With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}
-    Verify Response Message By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_receivingAccountNo}    ${response_message}
+    Verify Response Message With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response.transaction_limit_daily.msg}
+    Verify Transfer Amount With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${transfer_amount}
+    Verify Sender Account With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}
+    Verify Receiver Account With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}
+    Verify Response Message By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_receivingAccountNo}    ${response_message}
     Verify Response Message With API    ${response_message}    ${response.transaction_limit_daily.msg}
     Verify Response Code With API    ${response_code}    ${response.transaction_limit_daily.code}
 
@@ -84,16 +93,16 @@ API_TC_0668 Verify transfer money from customer’s saving account to another ba
     ${amount_boundary_2}    Set Variable    999998.00
     ${transfer_amount}    Set Variable    0.009
 
-    Insert Transaction For Prepare Precondition Test Data    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${user.receiver.bank_type.promptPay_mobile.status.inactive.account_no}    ${amount_boundary_1}    ${amount_boundary_2}
+    Insert Transaction For Prepare Precondition Test Data    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${RECEIVER_PROMPYPAY_MOBILE_INACTIVE}    ${amount_boundary_1}    ${amount_boundary_2}
     ${response_status}    ${response_code}    ${response_message}
-    ...    Transfer Money To Another Bank Account For Failed Case    ${transfer_amount}    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${user.receiver.bank_type.promptPay_mobile.status.inactive.account_no}
-    ...    ${user.receiver.bank_type.promptPay_mobile.status.inactive.type}    ${receivingBankCode}
+    ...    Transfer Money To Another Bank Account For Failed Case    ${transfer_amount}    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${RECEIVER_PROMPYPAY_MOBILE_INACTIVE}
+    ...    ${RECEIVER_PROMPYPAY_MOBILE_INACTIVE_TYPE}    ${receivingBankCode}
 
-    Verify Response Message With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response.transfer_unsuccessful_with_legal.msg}
-    Verify Transfer Amount With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${transfer_amount}
-    Verify Sender Account With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${user.sender.bank_type.bank_account_no.status.active.account_no}
-    Verify Receiver Account With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${user.receiver.bank_type.promptPay_mobile.status.inactive.account_no}
-    Verify Response Message By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_receivingAccountNo}    ${response_message}
+    Verify Response Message With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response.transfer_unsuccessful_with_legal.msg}
+    Verify Transfer Amount With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${transfer_amount}
+    Verify Sender Account With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}
+    Verify Receiver Account With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${RECEIVER_PROMPYPAY_MOBILE_INACTIVE}
+    Verify Response Message By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_receivingAccountNo}    ${response_message}
     Verify Response Message With API    ${response_message}    ${response.transfer_unsuccessful_with_legal.msg}
     Verify Response Code With API    ${response_code}    ${response.transfer_unsuccessful_with_legal.code}
 
@@ -106,20 +115,20 @@ API_TC_0739 Verify transfer money from customer’s saving account to another ba
     ${amount_boundary_2}    Set Variable    999998.00
     ${transfer_amount}    Set Variable    0.01
 
-    Insert Transaction For Prepare Precondition Test Data    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}    ${amount_boundary_1}    ${amount_boundary_2}
+    Insert Transaction For Prepare Precondition Test Data    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}    ${amount_boundary_1}    ${amount_boundary_2}
     ${response_status}    ${response_code}    ${response_amount}    ${response_sendingAccountNo}
     ...    ${response_receivingAccountNo}    ${response_receivingBankCode}    ${response_transferReferenceID}
-    ...    Transfer Money To Another Bank Account For Success Case    ${transfer_amount}    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}
-    ...    ${user.receiver.bank_type.promptPay_mobile.status.active.type}    ${receivingBankCode}
+    ...    Transfer Money To Another Bank Account For Success Case    ${transfer_amount}    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}
+    ...    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE_TYPE}    ${receivingBankCode}
 
-    Verify Response Message With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response.success.msg}
-    Verify Transfer Amount With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${transfer_amount}
-    Verify Sender Account With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${user.sender.bank_type.bank_account_no.status.active.account_no}
-    Verify Receiver Account With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}
-    Verify Response Message By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_receivingAccountNo}    ${response_status}
-    Verify Transfer Amount By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response_amount}
-    Verify Sender Account By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response_sendingAccountNo}
-    Verify Receiver Account By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response_receivingAccountNo}
+    Verify Response Message With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response.success.msg}
+    Verify Transfer Amount With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${transfer_amount}
+    Verify Sender Account With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}
+    Verify Receiver Account With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}
+    Verify Response Message By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_receivingAccountNo}    ${response_status}
+    Verify Transfer Amount By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response_amount}
+    Verify Sender Account By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response_sendingAccountNo}
+    Verify Receiver Account By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response_receivingAccountNo}
     Verify Response Message With API    ${response_status}    ${response.success.msg}
     Verify Response Code With API    ${response_code}    ${response.success.code}
 
@@ -132,20 +141,20 @@ API_TC_0767 Verify transfer money from customer’s saving account to another ba
     ${amount_boundary_2}    Set Variable    999999.00
     ${transfer_amount}    Set Variable    0.01
 
-    Insert Transaction For Prepare Precondition Test Data    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}    ${amount_boundary_1}    ${amount_boundary_2}
+    Insert Transaction For Prepare Precondition Test Data    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}    ${amount_boundary_1}    ${amount_boundary_2}
     ${response_status}    ${response_code}    ${response_amount}    ${response_sendingAccountNo}
     ...    ${response_receivingAccountNo}    ${response_receivingBankCode}    ${response_transferReferenceID}
-    ...    Transfer Money To Another Bank Account For Success Case    ${transfer_amount}    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}
-    ...    ${user.receiver.bank_type.promptPay_mobile.status.active.type}    ${receivingBankCode}
+    ...    Transfer Money To Another Bank Account For Success Case    ${transfer_amount}    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}
+    ...    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE_TYPE}    ${receivingBankCode}
 
-    Verify Response Message With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response.success.msg}
-    Verify Transfer Amount With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${transfer_amount}
-    Verify Sender Account With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${user.sender.bank_type.bank_account_no.status.active.account_no}
-    Verify Receiver Account With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}
-    Verify Response Message By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_receivingAccountNo}    ${response_status}
-    Verify Transfer Amount By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response_amount}
-    Verify Sender Account By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response_sendingAccountNo}
-    Verify Receiver Account By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response_receivingAccountNo}
+    Verify Response Message With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response.success.msg}
+    Verify Transfer Amount With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${transfer_amount}
+    Verify Sender Account With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}
+    Verify Receiver Account With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}
+    Verify Response Message By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_receivingAccountNo}    ${response_status}
+    Verify Transfer Amount By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response_amount}
+    Verify Sender Account By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response_sendingAccountNo}
+    Verify Receiver Account By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response_receivingAccountNo}
     Verify Response Message With API    ${response_status}    ${response.success.msg}
     Verify Response Code With API    ${response_code}    ${response.success.code}
 
@@ -158,20 +167,20 @@ API_TC_0878 Verify transfer money from customer’s saving account to another ba
     ${amount_boundary_2}    Set Variable    899999.00
     ${transfer_amount}    Set Variable    100000.00
 
-    Insert Transaction For Prepare Precondition Test Data    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}    ${amount_boundary_1}    ${amount_boundary_2}
+    Insert Transaction For Prepare Precondition Test Data    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}    ${amount_boundary_1}    ${amount_boundary_2}
     ${response_status}    ${response_code}    ${response_amount}    ${response_sendingAccountNo}
     ...    ${response_receivingAccountNo}    ${response_receivingBankCode}    ${response_transferReferenceID}
-    ...    Transfer Money To Another Bank Account For Success Case    ${transfer_amount}    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}
-    ...    ${user.receiver.bank_type.promptPay_mobile.status.active.type}    ${receivingBankCode}
+    ...    Transfer Money To Another Bank Account For Success Case    ${transfer_amount}    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}
+    ...    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE_TYPE}    ${receivingBankCode}
 
-    Verify Response Message With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response.success.msg}
-    Verify Transfer Amount With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${transfer_amount}
-    Verify Sender Account With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${user.sender.bank_type.bank_account_no.status.active.account_no}
-    Verify Receiver Account With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}
-    Verify Response Message By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_receivingAccountNo}    ${response_status}
-    Verify Transfer Amount By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response_amount}
-    Verify Sender Account By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response_sendingAccountNo}
-    Verify Receiver Account By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response_receivingAccountNo}
+    Verify Response Message With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response.success.msg}
+    Verify Transfer Amount With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${transfer_amount}
+    Verify Sender Account With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}
+    Verify Receiver Account With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}
+    Verify Response Message By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_receivingAccountNo}    ${response_status}
+    Verify Transfer Amount By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response_amount}
+    Verify Sender Account By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response_sendingAccountNo}
+    Verify Receiver Account By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response_receivingAccountNo}
     Verify Response Message With API    ${response_status}    ${response.success.msg}
     Verify Response Code With API    ${response_code}    ${response.success.code}
 
@@ -184,20 +193,20 @@ API_TC_0906 Verify transfer money from customer’s saving account to another ba
     ${amount_boundary_2}    Set Variable    900000.00
     ${transfer_amount}    Set Variable    100000.00
 
-    Insert Transaction For Prepare Precondition Test Data    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}    ${amount_boundary_1}    ${amount_boundary_2}
+    Insert Transaction For Prepare Precondition Test Data    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}    ${amount_boundary_1}    ${amount_boundary_2}
     ${response_status}    ${response_code}    ${response_amount}    ${response_sendingAccountNo}
     ...    ${response_receivingAccountNo}    ${response_receivingBankCode}    ${response_transferReferenceID}
-    ...    Transfer Money To Another Bank Account For Success Case    ${transfer_amount}    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}
-    ...    ${user.receiver.bank_type.promptPay_mobile.status.active.type}    ${receivingBankCode}
+    ...    Transfer Money To Another Bank Account For Success Case    ${transfer_amount}    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}
+    ...    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE_TYPE}    ${receivingBankCode}
 
-    Verify Response Message With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response.success.msg}
-    Verify Transfer Amount With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${transfer_amount}
-    Verify Sender Account With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${user.sender.bank_type.bank_account_no.status.active.account_no}
-    Verify Receiver Account With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}
-    Verify Response Message By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_receivingAccountNo}    ${response_status}
-    Verify Transfer Amount By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response_amount}
-    Verify Sender Account By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response_sendingAccountNo}
-    Verify Receiver Account By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response_receivingAccountNo}
+    Verify Response Message With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response.success.msg}
+    Verify Transfer Amount With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${transfer_amount}
+    Verify Sender Account With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}
+    Verify Receiver Account With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}
+    Verify Response Message By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_receivingAccountNo}    ${response_status}
+    Verify Transfer Amount By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response_amount}
+    Verify Sender Account By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response_sendingAccountNo}
+    Verify Receiver Account By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response_receivingAccountNo}
     Verify Response Message With API    ${response_status}    ${response.success.msg}
     Verify Response Code With API    ${response_code}    ${response.success.code}
 
@@ -210,20 +219,20 @@ API_TC_1017 Verify transfer money from customer’s saving account to another ba
     ${amount_boundary_2}    Set Variable    999999.00
     ${transfer_amount}    Set Variable    1000000.00
 
-    Insert Transaction For Prepare Precondition Test Data    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}    ${amount_boundary_1}    ${amount_boundary_2}
+    Insert Transaction For Prepare Precondition Test Data    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}    ${amount_boundary_1}    ${amount_boundary_2}
     ${response_status}    ${response_code}    ${response_amount}    ${response_sendingAccountNo}
     ...    ${response_receivingAccountNo}    ${response_receivingBankCode}    ${response_transferReferenceID}
-    ...    Transfer Money To Another Bank Account For Success Case    ${transfer_amount}    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}
-    ...    ${user.receiver.bank_type.promptPay_mobile.status.active.type}    ${receivingBankCode}
+    ...    Transfer Money To Another Bank Account For Success Case    ${transfer_amount}    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}
+    ...    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE_TYPE}    ${receivingBankCode}
 
-    Verify Response Message With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response.success.msg}
-    Verify Transfer Amount With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${transfer_amount}
-    Verify Sender Account With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${user.sender.bank_type.bank_account_no.status.active.account_no}
-    Verify Receiver Account With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}
-    Verify Response Message By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_receivingAccountNo}    ${response_status}
-    Verify Transfer Amount By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response_amount}
-    Verify Sender Account By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response_sendingAccountNo}
-    Verify Receiver Account By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response_receivingAccountNo}
+    Verify Response Message With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response.success.msg}
+    Verify Transfer Amount With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${transfer_amount}
+    Verify Sender Account With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}
+    Verify Receiver Account With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}
+    Verify Response Message By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_receivingAccountNo}    ${response_status}
+    Verify Transfer Amount By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response_amount}
+    Verify Sender Account By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response_sendingAccountNo}
+    Verify Receiver Account By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response_receivingAccountNo}
     Verify Response Message With API    ${response_status}    ${response.success.msg}
     Verify Response Code With API    ${response_code}    ${response.success.code}
 
@@ -236,20 +245,20 @@ API_TC_1045 Verify transfer money from customer’s saving account to another ba
     ${amount_boundary_2}    Set Variable    1000000.00
     ${transfer_amount}    Set Variable    1000000.00
 
-    Insert Transaction For Prepare Precondition Test Data    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}    ${amount_boundary_1}    ${amount_boundary_2}
+    Insert Transaction For Prepare Precondition Test Data    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}    ${amount_boundary_1}    ${amount_boundary_2}
     ${response_status}    ${response_code}    ${response_amount}    ${response_sendingAccountNo}
     ...    ${response_receivingAccountNo}    ${response_receivingBankCode}    ${response_transferReferenceID}
-    ...    Transfer Money To Another Bank Account For Success Case    ${transfer_amount}    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}
-    ...    ${user.receiver.bank_type.promptPay_mobile.status.active.type}    ${receivingBankCode}
+    ...    Transfer Money To Another Bank Account For Success Case    ${transfer_amount}    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}
+    ...    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE_TYPE}    ${receivingBankCode}
 
-    Verify Response Message With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response.success.msg}
-    Verify Transfer Amount With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${transfer_amount}
-    Verify Sender Account With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${user.sender.bank_type.bank_account_no.status.active.account_no}
-    Verify Receiver Account With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}
-    Verify Response Message By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_receivingAccountNo}    ${response_status}
-    Verify Transfer Amount By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response_amount}
-    Verify Sender Account By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response_sendingAccountNo}
-    Verify Receiver Account By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response_receivingAccountNo}
+    Verify Response Message With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response.success.msg}
+    Verify Transfer Amount With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${transfer_amount}
+    Verify Sender Account With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}
+    Verify Receiver Account With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}
+    Verify Response Message By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_receivingAccountNo}    ${response_status}
+    Verify Transfer Amount By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response_amount}
+    Verify Sender Account By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response_sendingAccountNo}
+    Verify Receiver Account By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response_receivingAccountNo}
     Verify Response Message With API    ${response_status}    ${response.success.msg}
     Verify Response Code With API    ${response_code}    ${response.success.code}
 
@@ -262,15 +271,15 @@ API_TC_1148 Verify transfer money from customer’s saving account to another ba
     ${amount_boundary_2}    Set Variable    999998.00
     ${transfer_amount}    Set Variable    1000001.00
 
-    Insert Transaction For Prepare Precondition Test Data    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}    ${amount_boundary_1}    ${amount_boundary_2}
+    Insert Transaction For Prepare Precondition Test Data    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}    ${amount_boundary_1}    ${amount_boundary_2}
     ${response_status}    ${response_code}    ${response_message}
-    ...    Transfer Money To Another Bank Account For Failed Case    ${transfer_amount}    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}
-    ...    ${user.receiver.bank_type.promptPay_mobile.status.active.type}    ${receivingBankCode}
+    ...    Transfer Money To Another Bank Account For Failed Case    ${transfer_amount}    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}
+    ...    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE_TYPE}    ${receivingBankCode}
 
-    Verify Response Message With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${response.transaction_limit.msg}
-    Verify Transfer Amount With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${transfer_amount}
-    Verify Sender Account With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${user.sender.bank_type.bank_account_no.status.active.account_no}
-    Verify Receiver Account With Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_transferReferenceID}    ${user.receiver.bank_type.promptPay_mobile.status.active.account_no}
-    Verify Response Message By Compare API And Database    ${user.sender.bank_type.bank_account_no.status.active.account_no}    ${response_receivingAccountNo}    ${response_message}
+    Verify Response Message With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${response.transaction_limit.msg}
+    Verify Transfer Amount With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${transfer_amount}
+    Verify Sender Account With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}
+    Verify Receiver Account With Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_transferReferenceID}    ${RECEIVER_PROMPYPAY_MOBILE_ACTIVE}
+    Verify Response Message By Compare API And Database    ${SENDER_BANK_ACCOUNT_NO_ACTIVE}    ${response_receivingAccountNo}    ${response_message}
     Verify Response Message With API    ${response_message}    ${response.transaction_limit.msg}
     Verify Response Code With API    ${response_code}    ${response.transaction_limit.code}

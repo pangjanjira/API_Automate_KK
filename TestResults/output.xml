@@ -1,43 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 7.0 (Python 3.11.4 on darwin)" generated="2024-09-08T19:52:46.538159" rpa="false" schemaversion="5">
-<suite id="s1" name="NormalBankAccount" source="/Users/janjira/PycharmProjects/API_Automate_KK/TestCases/NormalBankAccount.robot">
-<test id="s1-t1" name="Test Data" line="19">
-<kw name="Test Data Current Directory" owner="DB_Common">
-<kw name="Log To Console" owner="BuiltIn">
-<arg>TESTJAAAAA</arg>
-<doc>Logs the given message to the console.</doc>
-<status status="PASS" start="2024-09-08T19:52:46.705352" elapsed="0.000072"/>
-</kw>
-<status status="PASS" start="2024-09-08T19:52:46.704925" elapsed="0.000543"/>
-</kw>
+<robot generator="Robot 7.0 (Python 3.11.4 on darwin)" generated="2024-09-10T15:50:15.508235" rpa="false" schemaversion="5">
+<suite id="s1" name="PromptPayNationalID" source="/Users/janjira/PycharmProjects/API_Automate_KK/TestCases/PromptPayNationalID.robot">
+<test id="s1-t1" name="TestJA" line="20">
 <kw name="Log To Console" owner="BuiltIn">
 <arg>${user.sender.bank_type.bank_account_no.status.active.account_no}</arg>
 <doc>Logs the given message to the console.</doc>
-<status status="PASS" start="2024-09-08T19:52:46.705537" elapsed="0.000214"/>
+<status status="PASS" start="2024-09-10T15:50:15.666940" elapsed="0.000218"/>
 </kw>
-<kw name="Log To Console" owner="BuiltIn">
-<arg>${user.receiver.bank_type.bank_account_no.status.active.account_no}</arg>
-<doc>Logs the given message to the console.</doc>
-<status status="PASS" start="2024-09-08T19:52:46.705824" elapsed="0.000170"/>
-</kw>
-<kw name="Log To Console" owner="BuiltIn">
-<arg>${${user.receiver.bank_type.promptPay_national_id.status.active.account_no}}</arg>
-<doc>Logs the given message to the console.</doc>
-<status status="PASS" start="2024-09-08T19:52:46.706059" elapsed="0.000265"/>
-</kw>
-<kw name="Log To Console" owner="BuiltIn">
-<arg>${user.receiver.bank_type.promptPay_mobile.status.active.account_no}</arg>
-<doc>Logs the given message to the console.</doc>
-<status status="PASS" start="2024-09-08T19:52:46.706391" elapsed="0.000154"/>
-</kw>
-<kw name="Log To Console" owner="BuiltIn">
-<arg>${receivingBankCode}</arg>
-<doc>Logs the given message to the console.</doc>
-<status status="PASS" start="2024-09-08T19:52:46.706605" elapsed="0.000058"/>
-</kw>
-<status status="PASS" start="2024-09-08T19:52:46.704707" elapsed="0.002007"/>
+<status status="PASS" start="2024-09-10T15:50:15.666478" elapsed="0.000756"/>
 </test>
-<status status="PASS" start="2024-09-08T19:52:46.538919" elapsed="0.167937"/>
+<status status="PASS" start="2024-09-10T15:50:15.508742" elapsed="0.158639"/>
 </suite>
 <statistics>
 <total>
@@ -46,7 +18,7 @@
 <tag>
 </tag>
 <suite>
-<stat pass="1" fail="0" skip="0" id="s1" name="NormalBankAccount">NormalBankAccount</stat>
+<stat pass="1" fail="0" skip="0" id="s1" name="PromptPayNationalID">PromptPayNationalID</stat>
 </suite>
 </statistics>
 <errors>
